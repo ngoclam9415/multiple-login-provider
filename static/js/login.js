@@ -50,6 +50,18 @@ $("#twitter-btn").on("click", function(event){
     })
 })
 
+$("form").on("submit", function(event){
+    event.preventDefault();
+    var data = {"provider" : "default", "email" : $("#email").val(), "password" : $("#pass").val()}
+    post_register_api(register_url, data).then(response => {
+        if (response){
+            alert("LOGIN SUCCESSFULLY");
+        } else {
+            alert("LOGIN FAILED");
+        }
+    })
+                
+})
 
 async function post_register_api(url, data){
     const response = await fetch(url, {

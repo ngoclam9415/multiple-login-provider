@@ -30,3 +30,11 @@ class UserDatabase:
         if cursors.count():
             return False
         return True
+
+if __name__ == "__main__":
+    import bcrypt
+    database = UserDatabase()
+    cursors = database.user_collection.find_one({"email" : "lamnn@athena.studio"})
+    password = cursors["password"]
+    print(password)
+    print(bcrypt.checkpw("123456".encode("utf-8"), password))

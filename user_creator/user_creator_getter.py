@@ -6,6 +6,7 @@ class UserCreatorGetter:
     def __init__(self):
         self.facebook_factory = FacebookUserFactory()
         self.twitter_factory = TwitterUserFactory()
+        self.default_factory = DefaultUserFactory()
 
     def get_factory(self, provider):
         if provider == "facebook":

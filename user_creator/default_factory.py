@@ -1,7 +1,8 @@
 from user_creator.abstract_factory import AbstractUserFactory
 import requests
+import bcrypt
 
-class TwitterUserFactory(AbstractUserFactory):
+class DefaultUserFactory(AbstractUserFactory):
     def __init__(self):
         super().__init__()
 
@@ -32,9 +33,14 @@ class TwitterUserFactory(AbstractUserFactory):
     def _generate_document(self, email, password):
         document = self._document_format.copy()
         document["email"] = email
-        document["password"] = password
+        document["password"] = self._hash_password(password)
         document["provider"] = "default"
         return document
+
+    def _hash_password(self, password):
+        password = password.encode("utf-8")
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+        return hashed_password
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 from abc import ABC, ABCMeta, abstractmethod
 from utils.database import UserDatabase
 
-class AbstractUserFactory(ABCMeta):
+class AbstractUserFactory(ABC):
     @abstractmethod
     def __init__(self):
         self._document_format = {"email" : None,

@@ -14,7 +14,19 @@ class UserDatabase:
 	    self.user_collection.insert_one(document)
 	    
     def verify_fb_document(self, document):
-        cursors = self.user_collection.find({"$or" : [{"email" : document["email"]}, {"facebook_id" : "facebook_id"}]})
+        cursors = self.user_collection.find({"$or" : [{"email" : document["email"]}, {"facebook_id" : document["facebook_id"]}]})
+        if cursors.count():
+            return False
+        return True
+
+    def verify_tt_document(self, document):
+        cursors = self.user_collection.find({"$or" : [{"email" : document["email"]}, {"twitter_id" : document["twitter_id"]}]})
+        if cursors.count():
+            return False
+        return True
+
+    def verify_default_document(self, document):
+        cursors = self.user_collection.find({"email" : document["email"]})
         if cursors.count():
             return False
         return True

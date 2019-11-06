@@ -7,7 +7,7 @@ class FacebookUserFactory(AbstractUserFactory):
         self.fb_graph_url = "https://graph.facebook.com/v5.0/me"
 
     def create_user(self, **kwargs):
-        document = self._get_register_information(kwargs)
+        document = self._get_register_information(**kwargs)
         return self._register(document)
 
     def _get_register_information(self, **kwargs):
@@ -43,8 +43,8 @@ class FacebookUserFactory(AbstractUserFactory):
     def _get_facebook_information(self, query_params):
         response = requests.post(self.fb_graph_url, params=query_params)
         response_result = response.json()
-        fb_id = response_result.get("email", None)
-        fb_email = response_result.get("id", None)
+        fb_id = response_result.get("id", None)
+        fb_email = response_result.get("email", None)
         return fb_id, fb_email
 
 if __name__ == '__main__':

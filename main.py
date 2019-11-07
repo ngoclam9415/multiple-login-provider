@@ -35,9 +35,6 @@ def callback():
         factory.save_access_token(oauth_token ,resp.get("oauth_token", None), resp.get("oauth_token_secret", None))
     return render_template("blank_page.html")
 
-# @app.route("/api/verify_twitter_oath")
-# def verify_twitter_oath():
-#     pass
 
 @app.route("/api/get_twitter_request_token")
 def handle_tt_login():

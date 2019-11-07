@@ -52,15 +52,19 @@ $("#twitter-btn").on("click", function(event){
 
 $("form").on("submit", function(event){
     event.preventDefault();
-    var data = {"provider" : "default", "email" : $("#email").val(), "password" : $("#pass").val()}
-    post_register_api(register_url, data).then(response => {
-        if (response){
-            alert("LOGIN SUCCESSFULLY");
-        } else {
-            alert("LOGIN FAILED");
-        }
-    })
-                
+    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    if ($("#pass").val().match(passw)){
+        var data = {"provider" : "default", "email" : $("#email").val(), "password" : $("#pass").val()}
+        post_register_api(register_url, data).then(response => {
+            if (response){
+                alert("LOGIN SUCCESSFULLY");
+            } else {
+                alert("LOGIN FAILED");
+            }
+        })
+    } else {
+        alert("Password format is incorrect")
+    }         
 })
 
 async function post_register_api(url, data){

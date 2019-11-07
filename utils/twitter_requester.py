@@ -12,7 +12,7 @@ SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
 
 
 def get_request_token(consumer_key, consumer_secret):
-    oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret, callback_uri='https://localhost:5000/api/twitter_callback')
+    oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret, callback_uri='https://16eac7cd.ngrok.io/api/twitter_callback')
     resp = oauth_client.fetch_request_token(REQUEST_TOKEN_URL)
     return resp
 

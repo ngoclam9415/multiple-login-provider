@@ -47,5 +47,5 @@ def handle_tt_login():
 
 
 if __name__ == '__main__':
-    app.run('localhost', 5000, debug=True, ssl_context=('cert.pem', 'key.pem'))
-    # app.run('localhost', 5000, debug=True)
+    # app.run('localhost', 5000, debug=True, ssl_context=('cert.pem', 'key.pem'))
+    app.run('localhost', 5000, debug=True)

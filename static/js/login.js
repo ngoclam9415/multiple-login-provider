@@ -52,14 +52,14 @@ $("#twitter-btn").on("click", function(event){
 
 $("form").on("submit", function(event){
     event.preventDefault();
-    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
     if ($("#pass").val().match(passw)){
         var data = {"provider" : "default", "email" : $("#email").val(), "password" : $("#pass").val()}
         post_register_api(register_url, data).then(response => {
             if (response){
-                alert("LOGIN SUCCESSFULLY");
+                alert("SIGN UP SUCCESSFULLY");
             } else {
-                alert("LOGIN FAILED");
+                alert("SIGN UP FAILED");
             }
         })
     } else {

@@ -1,6 +1,7 @@
 from user_creator.abstract_factory import AbstractUserFactory
 import requests
 import bcrypt
+import re
 
 class DefaultUserFactory(AbstractUserFactory):
     def __init__(self):
@@ -13,7 +14,7 @@ class DefaultUserFactory(AbstractUserFactory):
     def _get_register_information(self, **kwargs):
         email = kwargs.get("email", None)
         password = kwargs.get("password", None)
-        if email is None :
+        if email is None or "@" not in email or not re.match(r'[A-Za-z0-9]{8,20}', password):
             return None
         document = self._generate_document(email, password)
         return document
@@ -25,6 +26,8 @@ class DefaultUserFactory(AbstractUserFactory):
         return self.database.verify_default_document(document)
 
     def _register(self, document):
+        if document is None:
+            return False
         if (self._verify_document(document)):
             self.database.insert_user(document)
             return True

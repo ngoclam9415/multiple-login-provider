@@ -12,10 +12,13 @@ class FacebookUserFactory(AbstractUserFactory):
 
     def _get_register_information(self, **kwargs):
         fb_access_token = kwargs.get("access_token", None)
+        print(fb_access_token)
         if fb_access_token is None :
             return None
         params = self._get_query_params(fb_access_token)
         fb_id, fb_email = self._get_facebook_information(params)
+        if (fb_id is None):
+            return None
         document = self._generate_document(fb_id, fb_email)
         return document
             
@@ -24,6 +27,8 @@ class FacebookUserFactory(AbstractUserFactory):
         return self.database.verify_fb_document(document)
 
     def _register(self, document):
+        if document is None:
+            return False
         if (self._verify_document(document)):
             self.database.insert_user(document)
             return True

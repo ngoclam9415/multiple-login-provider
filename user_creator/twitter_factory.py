@@ -20,6 +20,8 @@ class TwitterUserFactory(AbstractUserFactory):
         if tt_oauth_token is None :
             return None
         tt_id, tt_email = self._get_twitter_information(tt_oauth_token)
+        if tt_id is None:
+            return None
         document = self._generate_document(tt_id, tt_email)
         return document
             
@@ -40,6 +42,8 @@ class TwitterUserFactory(AbstractUserFactory):
         return self.database.verify_tt_document(document)
 
     def _register(self, document):
+        if document is None:
+            return False
         if (self._verify_document(document)):
             self.database.insert_user(document)
             return True
@@ -54,13 +58,16 @@ class TwitterUserFactory(AbstractUserFactory):
         return document
 
     def _get_twitter_information(self, oauth_token):
-        api = twitter.Api(consumer_key=self.consumer_key,
-                        consumer_secret=self.consumer_secret,
-                        access_token_key=self.authenticate_info[oauth_token]["access_token_key"],
-                        access_token_secret=self.authenticate_info[oauth_token]["access_token_secret"])
-        user = api.VerifyCredentials(include_email=True)
-        user = user.AsDict()
-        return user["id"], user["email"]
+        try:
+            api = twitter.Api(consumer_key=self.consumer_key,
+                            consumer_secret=self.consumer_secret,
+                            access_token_key=self.authenticate_info[oauth_token]["access_token_key"],
+                            access_token_secret=self.authenticate_info[oauth_token]["access_token_secret"])
+            user = api.VerifyCredentials(include_email=True)
+            user = user.AsDict()
+            return user["id"], user["email"]
+        except:
+            return None, None
 
 if __name__ == '__main__':
     pass

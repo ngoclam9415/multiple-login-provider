@@ -8,3 +8,9 @@ class TwitterConfig:
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
     AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
     SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
+
+class FacebookConfig:
+    id = 2667710156613227
+    secret = "a85052e426573640a2d008957e60412c"
+
+provider_config = {"facebook" : FacebookConfig}

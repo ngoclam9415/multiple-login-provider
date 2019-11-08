@@ -4,6 +4,7 @@ from user_creator.user_creator_getter import UserCreatorGetter
 import json
 from utils.twitter_requester import *
 import twitter
+from utils.oauth_signup.provider_getter import ProviderGetter
 
 app = Flask(__name__)
 userCreatorGetter = UserCreatorGetter()
@@ -43,7 +44,10 @@ def handle_tt_login():
     factory.save_request_token(token_data["oauth_token"], token_data["oauth_token_secret"])
     return jsonify({"oauth_token" : token_data["oauth_token"]})
 
-
+@app.route("/authorize/<provider>")
+def authorize_provider(provider):
+    provider_class = ProviderGetter().get_provider(provider)
+    return provider_class.authorize()
 
 
 if __name__ == '__main__':

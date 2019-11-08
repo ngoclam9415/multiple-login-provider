@@ -17,6 +17,11 @@ class FacebookSignUp(OAuthSignUp):
         print(self.consumer_secret)
         print(self.consumer_id)
         print(self.get_callback_url())
+        print("authrozie_url : ",self.service.get_authorize_url(
+                            scope='email',
+                            response_type='code',
+                            redirect_uri=self.get_callback_url())
+                            )
         return redirect(self.service.get_authorize_url(
                             scope='email',
                             response_type='code',

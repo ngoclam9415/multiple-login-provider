@@ -29,3 +29,7 @@ class AbstractUserFactory(ABC):
     def _register(self, document):
         pass
 
+    @abstractmethod
+    def process_and_save_access_token(self):
+        pass
+

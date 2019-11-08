@@ -2,6 +2,9 @@ import unittest
 from main import *
 import json
 from utils.database import UserDatabase
+from user_creator.facebook_factory import FacebookUserFactory
+from user_creator.default_factory import DefaultUserFactory
+from test_case import *
 
 class FlaskMainAppTest(unittest.TestCase):
     def setUp(self):
@@ -18,31 +21,34 @@ class FlaskMainAppTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_register_api(self):
-        headers = {"Content-Type" : "application/json"}
-        access_tokens = ["EAAl6RKwZCpmsBAGu2Tkl2ZBMGA9ZCUGyZCab41rfwkSZB5RdcFAmsvwnRqtocnVlGqkkMuBj4K8vnZC5ORmyTyzF7eEeyDSepEad0c85YZAgwSD1POjjadXJMrdMArOr1Ob3nNZBhQdGQ0nyiGvNDncsYLgivYwljReyNmI7u6qpCgC3XabeHWRV", "asdasd123asd!@@SAS", "!@#$%^&*YGHA(SHIANS)"]
-        expected_results = [True, False, False]
-        for index, access_token in enumerate(access_tokens):
-            response = self.app.post('/api/register', headers=headers, data=json.dumps({"provider" : "facebook", "access_token" : access_token}))
-            print(index, response.data)
-            self.assertEqual(json.loads(response.data), expected_results[index])
+        result = RegisterAPITestCase1.request(self.app)
+        self.assertEquals(result, RegisterAPITestCase1.expected_results)
 
-        expected_results = [False, False, False]
-        for index, access_token in enumerate(access_tokens):
-            response = self.app.post('/api/register', headers=headers, data=json.dumps({"provider" : "twitter", "oauth_token" : access_token}))
-            print(index, response.data)
-            self.assertEqual(json.loads(response.data), expected_results[index])
+        result = RegisterAPITestCase2.request(self.app)
+        self.assertEquals(result, RegisterAPITestCase2.get_expected_results())
 
-        emails = ["dasd123123", "112312e12e", "", "lamnn@athena.studio"]
-        email_status = [False, False, False, True]
-        passwords = ["dasd123123", "11231!#$%^W&QS2e12e", "", "asd12e1jadsasdsasdasdasdasdasdasdascasbjahbrwqnnancnmbashbmca"]
-        password_status = [True, False, False, False]
-        for i, email in enumerate(emails):
-            for j, password in enumerate(passwords):
-                response = self.app.post('/api/register', headers=headers, data=json.dumps({"email" : email, "password" : password, "provider" : "default"}))
-                self.assertEqual(json.loads(response.data), email_status[i] and password_status[j])
+    def test_facebook_factory_methods(self):
+        self.database.user_collection.remove({})
+        facebook_factory = FacebookUserFactory()
+
+        results = FacebookFactoryTestCases.test_create_user(facebook_factory)
+        self.assertEquals(results, FacebookFactoryTestCases.test_create_user_expected_result)
+
+    def test_default_factory_methods(self):
+        self.database.user_collection.remove({})
+        default_factory = DefaultUserFactory()
+        # results = DefaultFactoryTestCases.test_create_user(default_factory)
+        # self.assertEquals(results, DefaultFactoryTestCases.get_expected_results())
+        results = DefaultFactoryTestCases.test_verify_email(default_factory)
+        self.assertEquals(results, DefaultFactoryTestCases.email_status)
+        results = DefaultFactoryTestCases.test_verify_password(default_factory)
+        self.assertEquals(results, DefaultFactoryTestCases.password_status)
+
 
     def test_callback_page(self):
-        response = self.app.get('/api/twitter_callback', follow_redirects=True)
+        response = self.app.get('/api/callback/facebook', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.app.get('/api/callback/twitter', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
     
 if __name__ == "__main__":

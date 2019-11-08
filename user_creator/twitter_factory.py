@@ -2,6 +2,8 @@ from user_creator.abstract_factory import AbstractUserFactory
 import requests
 import twitter
 from utils.config import TwitterConfig as Config
+from flask import request
+from requests_oauthlib import OAuth1Session
 
 class TwitterUserFactory(AbstractUserFactory):
     def __init__(self):
@@ -68,6 +70,19 @@ class TwitterUserFactory(AbstractUserFactory):
             return user["id"], user["email"]
         except:
             return None, None
+
+    def process_and_save_access_token(self):
+        oauth_token = request.values.get("oauth_token")
+        oauth_verifier = request.values.get("oauth_verifier", None)
+        if oauth_verifier is not None:
+            oauth_token_secret = self.get_request_token_secret(oauth_token)
+            oauth_client = OAuth1Session(self.consumer_key,                     
+                                            client_secret=self.consumer_secret,
+                                            resource_owner_key=oauth_token,
+                                            resource_owner_secret=oauth_token_secret,
+                                            verifier=oauth_verifier)
+            resp = oauth_client.fetch_request_token(Config.ACCESS_TOKEN_URL)
+            self.save_access_token(oauth_token, resp.get("oauth_token", None), resp.get("oauth_token_secret", None))
 
 if __name__ == '__main__':
     pass

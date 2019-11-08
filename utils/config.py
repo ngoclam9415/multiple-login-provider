@@ -8,3 +8,4 @@ class TwitterConfig:
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
     AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
     SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
+    CALLBACK_URL = "https://16eac7cd.ngrok.io/api/callback/twitter"

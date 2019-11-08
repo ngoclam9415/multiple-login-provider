@@ -52,5 +52,8 @@ class FacebookUserFactory(AbstractUserFactory):
         fb_email = response_result.get("email", None)
         return fb_id, fb_email
 
+    def process_and_save_access_token(self):
+        pass
+
 if __name__ == '__main__':
     pass
